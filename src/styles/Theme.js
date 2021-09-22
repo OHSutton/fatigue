@@ -1,17 +1,18 @@
-import React from 'react';
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme } from '@mui/material/styles';
 
 
 const SiteTheme = createTheme({
   palette: {
-    type: "light",
+    type: "dark",
     primary: {
       main: '#EC4E20'
     },
     secondary: {
-      main: '#0000008A' // 8A approx 54% alpha
+      main: '#FAA61A'
     }
   }
 })
+
+
 
 export default SiteTheme

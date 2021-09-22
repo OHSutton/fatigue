@@ -1,12 +1,20 @@
+import React from 'react'
+
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { ThemeProvider } from '@material-ui/core/styles';
+
+import { ThemeProvider } from '@mui/material/styles';
 
 import Homescreen from "./components/Homescreen";
 import Start from "./components/Start";
 import Settings from "./components/Settings";
+
+
 import SiteTheme from "./styles/Theme";
 
+
+
 function App() {
+
   return (
     <ThemeProvider theme={SiteTheme}>
       <div>

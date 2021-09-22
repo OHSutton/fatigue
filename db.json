@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "id": 0,
+      "name": "Guest",
+      "F1": "auditory",
+      "F2": "vibrator",
+      "F3": "trivia",
+      "F4": "parking"
+    }
+  ],
+  "trivia": [
+    {
+      "id": 1,
+      "question": "Which country consumes the most chocolate per capita?",
+      "answer": "Switzerland"
+    }
+  ]
+}
