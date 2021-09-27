@@ -1,11 +1,11 @@
 {
   "current-user-id": {
-    "id": 0,
-    "name": "Guest",
+    "id": 1,
+    "name": "Darren",
     "F1": "auditory",
-    "F2": "vibrator",
+    "F2": "auditory",
     "F3": "trivia",
-    "F4": "parking"
+    "F4": "auditory"
   },
   "users": [
     {
