@@ -1,4 +1,12 @@
 {
+  "current-user-id": {
+    "id": 0,
+    "name": "Guest",
+    "F1": "auditory",
+    "F2": "vibrator",
+    "F3": "trivia",
+    "F4": "parking"
+  },
   "users": [
     {
       "id": 0,
@@ -7,6 +15,14 @@
       "F2": "vibrator",
       "F3": "trivia",
       "F4": "parking"
+    },
+    {
+      "id": 1,
+      "name": "Darren",
+      "F1": "auditory",
+      "F2": "auditory",
+      "F3": "trivia",
+      "F4": "auditory"
     }
   ],
   "trivia": [

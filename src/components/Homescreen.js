@@ -1,52 +1,64 @@
 import React, {useEffect, useState} from "react"
 import { Link } from "react-router-dom";
-import {Paper, Button} from "@mui/material";
-import {makeStyles} from "@mui/styles";
+
+import {Paper, Button, InputLabel, Select, MenuItem, FormControl} from "@mui/material";
+
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 
 import userService from "../services/users";
 import {Guest} from "../utils";
 
+import '../styles/common.css'
+import '../styles/homescreen.css'
 
-const useStyles = makeStyles({
-  page: {
-    width: 800,
-    height: 480,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    rowGap: 10,
-  },
+const Header = ({users, currentUser, updateCurrentUser}) => {
+  const menuItems = users.map(user =>
+    <MenuItem key={user.name} value={user.name}>{user.name}</MenuItem>
+  )
 
-  homeButton: {
-    width: 300,
-    height: 100,
-  }
-});
+  return (
+    <div className={'header'}>
+      <FormControl sx={{width: 200}}>
+        <InputLabel id={`change-current-user`}>Change User</InputLabel>
+        <Select
+          labelId={`change-current-user`}
+          id={currentUser.id.toString()}
+          value={currentUser.name}
+          label={"Change User"}
+          onChange={(event) => {updateCurrentUser(event)}}
+        >
+          {menuItems}
+        </Select>
+      </FormControl>
+    </div>
+  )
+}
 
+const ControlPanel = () => {
+  return (
+    <div className={'homescreen-buttons'}>
+      <Button className={'big-button'} component={Link} to={"/start"} variant={"contained"} color={"primary"}
+              startIcon={<PlayArrowRoundedIcon />}>
+        Start
+      </Button>
+      <Button className={'big-button'} component={Link} to={"/calibrate"} variant={"contained"} color={"secondary"}
+              startIcon={<CameraAltIcon/>}>
+        Calibrate Camera
+      </Button>
+      <Button className={'big-button'} component={Link} to={"/settings"} variant={"contained"} color={"secondary"}
+              startIcon={<SettingsRoundedIcon />}>
+        Settings
+      </Button>
+    </div>
+  )
+}
 
 const Homescreen = () => {
   const [currentUser, setCurrentUser] = useState(Guest)
-  const [allUsers, setAllUsers] = useState([])
+  const [allUsers, setAllUsers] = useState([Guest])
 
-  let currentUserId = localStorage.getItem('currentUserId')
-
-  if (!currentUserId) {
-    localStorage.setItem('currentUserId', '0') // Set to default Guest user
-    currentUserId = 0
-  } else {
-    currentUserId = parseInt(currentUserId)
-  }
-
-  // Get current user
-  useEffect(() => {
-    userService
-      .getUserById(currentUserId)
-      .then(user => {
-        console.log("Fetched user", user)
-        setCurrentUser(user)
-      })
-  }, [currentUserId])
   // Get all users
   useEffect(() => {
     userService
@@ -57,16 +69,31 @@ const Homescreen = () => {
       })
   }, [])
 
+  // Get current user
+  useEffect(() => {
+    userService
+      .getCurrentUser()
+      .then(user => {
+        console.log("Fetched user", user)
+        setCurrentUser(user)
+      })
+  }, [])
 
-  const classes = useStyles();
+
+  const updateCurrentUser = (event) => {
+    let newCurrent = allUsers.find(user =>
+      user.name === event.target.value
+    )
+    userService.setCurrentUser(newCurrent)
+      .then(resp => {
+       setCurrentUser(resp)
+    })
+  }
+
   return (
-    <Paper className={classes.page} square={true}>
-      <Button className={classes.homeButton} component={Link} to={"/start"} variant={"contained"} color={"primary"}>
-        Start
-      </Button>
-      <Button className={classes.homeButton} component={Link} to={"/settings"} variant={"contained"} color={"secondary"}>
-        Settings
-      </Button>
+    <Paper className={'page homescreen-spaced'} square={true}>
+      <Header users={allUsers} currentUser={currentUser} updateCurrentUser={updateCurrentUser}/>
+      <ControlPanel />
     </Paper>
   )
 }

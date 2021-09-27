@@ -57,27 +57,25 @@ const Configurable = ({name, configId, user, onChange}) => {
   )
 }
 
-
 const Settings = () => {
   const [user, setUser] = useState(Guest)
-  const currentUserId = localStorage.getItem('currentUserId')
 
   useEffect(() => {
     userService
-      .getUserById(currentUserId)
+      .getCurrentUser()
       .then(curUser => {
         setUser(curUser)
       })
-  }, [currentUserId])
+  }, [])
 
   const recordSelection = (event, selectionId) => {
     const newUser = {...user, [selectionId]: event.target.value}
-    userService.updateUser(currentUserId, newUser).then(r => setUser(r))
+    userService.updateUser(newUser.id, newUser).then(r => setUser(r))
   }
 
   const reset = () => {
-    const newUser = {...Guest}
-    userService.updateUser(currentUserId, newUser).then(r => setUser(r))
+    const newUser = {...Guest, id: user.id, name: user.name}
+    userService.updateUser(newUser.id, newUser).then(r => setUser(r))
   }
 
   return (

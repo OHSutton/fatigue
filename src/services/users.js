@@ -1,10 +1,16 @@
 import axios from 'axios'
 
+const currentUserUrl = 'http://localhost:3001/current-user-id'
 const baseUrl = 'http://localhost:3001/users'
 
 
 const getAllUsers = () => {
   const req = axios.get(baseUrl)
+  return req.then(response => response.data)
+}
+
+const getCurrentUser = () => {
+  const req = axios.get(currentUserUrl)
   return req.then(response => response.data)
 }
 
@@ -23,5 +29,10 @@ const updateUser = (id, newUser) => {
   return req.then(response => response.data)
 }
 
+const setCurrentUser = (newUser) => {
+  const req = axios.put(currentUserUrl, newUser)
+  return req.then(response => response.data)
+}
 
-export default { getAllUsers, getUserById, createUser, updateUser}
+// eslint-disable-next-line import/no-anonymous-default-export
+export default { getAllUsers, getUserById, getCurrentUser, createUser, updateUser, setCurrentUser}

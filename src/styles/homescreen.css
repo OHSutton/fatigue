@@ -1,0 +1,21 @@
+.homescreen-spaced {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.header {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 10px;
+}
+
+.homescreen-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 10px;
+    margin-bottom: 40px;
+}
