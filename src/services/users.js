@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const currentUserUrl = 'http://localhost:3001/current-user-id'
+const cameraActiveUrl = 'http://localhost:3001/camera'
+const currentUserUrl = 'http://localhost:3001/current-user'
 const baseUrl = 'http://localhost:3001/users'
 
 
@@ -34,5 +35,11 @@ const setCurrentUser = (newUser) => {
   return req.then(response => response.data)
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default { getAllUsers, getUserById, getCurrentUser, createUser, updateUser, setCurrentUser}
+// active is: 'true' or 'false'
+const setCameraActivity = (active) => {
+  const req = axios.put(cameraActiveUrl, {"active": active})
+  return req.then(response => response.data)
+}
+
+export default { getAllUsers, getUserById, getCurrentUser, createUser, updateUser, setCurrentUser,
+  setCameraActivity}

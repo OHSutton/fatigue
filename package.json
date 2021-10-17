@@ -12,13 +12,18 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.4",
+    "body-parser": "^1.19.0",
     "concurrently": "^6.2.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-sse": "^0.5.3",
     "json-server": "^0.16.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router": "^5.2.1",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
+    "react-usestateref": "^1.0.8",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -27,13 +32,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "json-server --port 3001 --watch db.json",
-    "dev": "concurrently --kill-others \"npm run server\" \"npm start\""
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "backend": "node backend.js",
+    "dev-backend": "nodemon backend.js",
+    "dev": "concurrently --kill-others \"npm run server\" \"npm run dev-backend\" \"npm start\""
   },
   "browserslist": {
     "production": [
@@ -46,5 +47,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
   }
 }

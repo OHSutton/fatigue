@@ -1,0 +1,62 @@
+POST http://localhost:3002/trivia
+Content-Type: application/json
+
+{
+  "question": "WOWOWOW VERY NICE?",
+  "answer": "No it isn't!",
+  "time": 0
+}
+
+
+###
+POST http://localhost:3002/trivia
+Content-Type: application/json
+
+{
+  "question": "How big is the Eiffel Tower?",
+  "answer": "Too Big!",
+  "time": 0
+}
+
+###
+POST http://localhost:3002/fatigue
+Content-Type: application/json
+
+{
+  "fatigue": "F0"
+}
+
+###
+POST http://localhost:3002/fatigue
+Content-Type: application/json
+
+{
+  "fatigue": "F1"
+}
+
+###
+POST http://localhost:3002/fatigue
+Content-Type: application/json
+
+{
+  "fatigue": "F2"
+}
+
+###
+POST http://localhost:3002/fatigue
+Content-Type: application/json
+
+{
+  "fatigue": "F3"
+}
+
+###
+
+POST http://localhost:3002/fatigue
+Content-Type: application/json
+
+{
+  "fatigue": "F4"
+}
+
+###

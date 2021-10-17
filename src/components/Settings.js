@@ -9,6 +9,14 @@ import "../styles/settings.css"
 import userService from '../services/users'
 import {Guest} from "../utils"
 
+
+
+// WIP
+const F1Settings = () => {
+
+}
+
+
 const TitleBar = ({user}) => {
   return (
     <div className={"title-bar"}>
@@ -30,7 +38,7 @@ const TitleBar = ({user}) => {
 const Configurable = ({name, configId, user, onChange}) => {
   return (
     <div className={"configurable"}>
-      <Typography variant={'h5'} style={{"fontSize": 20}} gutterBottom>
+      <Typography variant={'h5'} style={{"fontSize": 20, 'marginRight': 10}} gutterBottom>
         {name}
       </Typography>
 

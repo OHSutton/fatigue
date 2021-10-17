@@ -1,0 +1,24 @@
+.start-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.start-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.start-footer {
+    margin-bottom: 10px;
+}
+
+.trivia {
+    margin-bottom: 30px;
+}
+
+.time-elapsed {
+    margin-top: 10px;
+}

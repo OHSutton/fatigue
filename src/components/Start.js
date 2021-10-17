@@ -1,97 +1,125 @@
-import React, {useEffect, useState} from "react";
-import { Link } from "react-router-dom";
-import {Paper, Typography, Button} from "@mui/material";
-import {makeStyles} from "@mui/styles";
+import React, {useEffect} from "react";
+import useState from 'react-usestateref'
+import {Link} from "react-router-dom";
+import {Button, Paper, Typography} from "@mui/material";
 
+import {QuestionTime, TriviaTime, FatigueColours, FatigueStatus} from '../utils'
+import '../styles/common.css'
+import '../styles/start.css'
 
-const useStyles = makeStyles({
-  page: {
-    width: 800,
-    height: 480,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-
-  frame: {
-    width: '100%',
-    height: '100%',
-  },
-
-  stopWatch: {
-    marginTop: 10,
-    marginRight: 10,
-  },
-
-  subButton: {
-    width: 200,
-    height: 80,
-    marginBottom: 10,
-  },
-
-  trivia: {
-    padding: 10,
-  }
-});
-
-
-
-const Header = ({runtime, classes}) => {
+const Header = ({runtime, status}) => {
   return (
-    <div>
-      <Typography className={classes.stopWatch} variant={'h3'} gutterBottom>
+    <div className={'start-header'}>
+      <Typography variant={'h3'}>
         {new Date(runtime * 1000).toISOString().substr(11, 8)}
+      </Typography>
+      <Typography className={'time-elapsed'} style={{color: FatigueColours[status]}} variant={'h4'}>
+        Fatigue Status: {FatigueStatus[status]}
       </Typography>
     </div>
   )
 }
 
+const Trivia = ({trivia}) => {
+  if (trivia.question === undefined || trivia.time >= 90) {
+    return <div></div>
+  }
 
-const Footer = ({classes}) => {
+  if (trivia.time < QuestionTime) {
+    return (
+      <div className={"trivia"}>
+        <Typography variant={'h3'}>
+          {`Q: ${trivia["question"]}`}
+        </Typography>
+      </div>
+    )
+  } else if (trivia.time <= TriviaTime) {
+    return (
+      <div className={"trivia"}>
+        <Typography variant={'h3'}>
+          {`A: ${trivia["answer"]}`}
+        </Typography>
+      </div>
+    )
+  }
+}
+
+
+const Footer = () => {
   return (
-    <div>
-      <Button className={classes.subButton} component={Link} to={"/"} variant={"contained"} color={"primary"}>
+    <div className={'start-footer'}>
+      <Button className={'skinny-button'} component={Link} to={"/"} variant={"contained"} color={"primary"}>
         Stop
       </Button>
     </div>
   )
 }
 
-// What animal has black and white stripes?
-const Trivia = ({classes}) => {
-  const playTTS = () => {
-    let utterance = new SpeechSynthesisUtterance("Which country consumes the most chocolate per capita?")
-    speechSynthesis.speak(utterance)
-  }
-  return (
-    <div>
-      <Typography className={classes.trivia} variant={'h3'} align={'center'}>
-        Which country consumes the most chocolate per capita?
-      </Typography>
-      <Button size={"large"} variant={"contained"} onClick={playTTS}>TTS</Button>
-    </div>
-  )
-}
 
 const Start = () => {
-  const [runtime, setRuntime] = useState(0);
-  const classes = useStyles();
+  const [runtime, setRuntime] = useState(0)
+  const [status, setStatus] = useState('F0')
+  const [trivia, setTrivia, triviaRef] = useState({})
+
 
   useEffect(() => {
-    let timerID = setTimeout(() => {
-      setRuntime(runtime + 1)
-    }, 1000)
+    let intervalID = setInterval(() => {
+      setRuntime(runtime + 0.5)
+
+      if (triviaRef.current.question !== undefined) {
+        if (triviaRef.current.time < TriviaTime) {
+          setTrivia(prevTrivia => {
+            return {...prevTrivia, time: prevTrivia['time'] + 0.5}
+          })
+        } else {
+          setTrivia({})
+        }
+      }
+    }, 500)
+
+
     return(() => {
-      clearInterval(timerID)
+      clearInterval(intervalID)
     })
   },[runtime])
 
+  useEffect(() => {
+    let eventSource = new EventSource('http://localhost:3002/stream')
+    console.log("STARTED EVENTSOURCE", eventSource)
+    eventSource.onmessage = e => {
+      console.log("RECEIVED MESSAGE", e)
+
+      let data = JSON.parse(e.data)
+      if (data.type === "trivia") {
+        updateTrivia(data.data)
+      } else {
+        updateFatigueLevel(data.data)
+      }
+    }
+    return (() => {
+      console.log("Closing Source")
+      eventSource.close()
+    })
+  }, [])
+
+
+
+  const updateTrivia = (rawTrivia) => {
+    rawTrivia.time = 0
+    console.log("NEW TRIVIA", rawTrivia)
+    setTrivia(rawTrivia)
+  }
+
+  const updateFatigueLevel = (fatigueStatus) => {
+    setStatus(fatigueStatus['fatigue'])
+  }
+
+
   return (
-    <Paper className={classes.page} square={true}>
-      <Header runtime={runtime} classes={classes}/>
-      <Trivia classes={classes} />
-      <Footer classes={classes} />
+    <Paper className={'page start-container'} square={true}>
+      <Header runtime={runtime} status={status} />
+      <Trivia trivia={trivia} />
+      <Footer />
     </Paper>
   )
 }

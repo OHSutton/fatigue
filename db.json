@@ -1,11 +1,14 @@
 {
-  "current-user-id": {
-    "id": 1,
-    "name": "Darren",
-    "F1": "auditory",
-    "F2": "auditory",
+  "camera": {
+    "active": "false"
+  },
+  "current-user": {
+    "id": 0,
+    "name": "Guest",
+    "F1": "vibrator",
+    "F2": "vibrator",
     "F3": "trivia",
-    "F4": "auditory"
+    "F4": "parking"
   },
   "users": [
     {
@@ -18,11 +21,35 @@
     },
     {
       "id": 1,
-      "name": "Darren",
+      "name": "Zebra",
       "F1": "auditory",
       "F2": "auditory",
       "F3": "trivia",
       "F4": "auditory"
+    },
+    {
+      "id": 2,
+      "name": "Snail",
+      "F1": "auditory",
+      "F2": "vibrator",
+      "F3": "trivia",
+      "F4": "parking"
+    },
+    {
+      "id": 3,
+      "name": "Hippo",
+      "F1": "auditory",
+      "F2": "vibrator",
+      "F3": "trivia",
+      "F4": "parking"
+    },
+    {
+      "id": 4,
+      "name": "Tiger",
+      "F1": "auditory",
+      "F2": "vibrator",
+      "F3": "trivia",
+      "F4": "parking"
     }
   ],
   "trivia": [

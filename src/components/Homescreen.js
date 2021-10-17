@@ -7,6 +7,7 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 
+
 import userService from "../services/users";
 import {Guest} from "../utils";
 
@@ -90,9 +91,10 @@ const Homescreen = () => {
     })
   }
 
+
   return (
     <Paper className={'page homescreen-spaced'} square={true}>
-      <Header users={allUsers} currentUser={currentUser} updateCurrentUser={updateCurrentUser}/>
+      <Header users={allUsers} currentUser={currentUser} updateCurrentUser={updateCurrentUser} />
       <ControlPanel />
     </Paper>
   )
