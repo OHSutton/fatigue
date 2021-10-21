@@ -1,0 +1,62 @@
+{
+  "camera": {
+    "active": "false"
+  },
+  "current-user": {
+    "id": 2,
+    "name": "Snail",
+    "F1": "auditory",
+    "F2": "vibrator",
+    "F3": "trivia",
+    "F4": "parking"
+  },
+  "users": [
+    {
+      "id": 0,
+      "name": "Guest",
+      "F1": "auditory",
+      "F2": "vibrator",
+      "F3": "trivia",
+      "F4": "parking"
+    },
+    {
+      "id": 1,
+      "name": "Zebra",
+      "F1": "auditory",
+      "F2": "auditory",
+      "F3": "trivia",
+      "F4": "auditory"
+    },
+    {
+      "id": 2,
+      "name": "Snail",
+      "F1": "auditory",
+      "F2": "vibrator",
+      "F3": "trivia",
+      "F4": "parking"
+    },
+    {
+      "id": 3,
+      "name": "Hippo",
+      "F1": "auditory",
+      "F2": "vibrator",
+      "F3": "trivia",
+      "F4": "parking"
+    },
+    {
+      "id": 4,
+      "name": "Tiger",
+      "F1": "auditory",
+      "F2": "vibrator",
+      "F3": "trivia",
+      "F4": "parking"
+    }
+  ],
+  "trivia": [
+    {
+      "id": 1,
+      "question": "Which country consumes the most chocolate per capita?",
+      "answer": "Switzerland"
+    }
+  ]
+}

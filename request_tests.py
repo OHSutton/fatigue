@@ -1,7 +1,4 @@
 import requests
-import io
-import numpy as np
-import matplotlib.pyplot as plt
 
 trivia = "http://localhost:3002/trivia"
 fatigue = "http://localhost:3002/fatigue"
@@ -62,26 +59,7 @@ If detect slight fatigue:
 ---> send_fatigue_level("F1")
 
 """
-import requests
-import json
-import cv2
 
-addr = 'http://localhost:5000'
-test_url = addr + '/api/test'
-
-# prepare headers for http request
-
-def send_photo(image_cv2):
-    print("SENDING")
-    headers = {'content-type': 'image/jpeg'}
-    _, img_encoded = cv2.imencode('.jpg', image_cv2)
-    response = requests.post(photo, data=img_encoded.tobytes(), headers=headers)
-
-    print(response)
-    print("SENT")
-
-
-
-dog = cv2.imread("dog.jpg",0)
-print(dog)
-send_photo(dog)
+import sys
+if __name__ == "__main__":
+    send_fatigue_level(sys.argv[1])

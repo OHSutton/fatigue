@@ -23,7 +23,7 @@ function App() {
             <Route path={"/"} exact component={() => <Homescreen />} />
             <Route path={"/start"} exact component={() => <Start />} />
             <Route path={"/settings"} exact component={() => <Settings />} />
-            <Route path={"/calibrate"} exact component={() => <Calibrate />} />
+            {/*<Route path={"/calibrate"} exact component={() => <Calibrate />} />*/}
           </Switch>
         </Router>
       </div>

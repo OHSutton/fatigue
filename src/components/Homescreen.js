@@ -44,10 +44,10 @@ const ControlPanel = () => {
               startIcon={<PlayArrowRoundedIcon />}>
         Start
       </Button>
-      <Button className={'big-button'} component={Link} to={"/calibrate"} variant={"contained"} color={"secondary"}
-              startIcon={<CameraAltIcon/>}>
-        Calibrate Camera
-      </Button>
+      {/*<Button className={'big-button'} component={Link} to={"/calibrate"} variant={"contained"} color={"secondary"}*/}
+      {/*        startIcon={<CameraAltIcon/>}>*/}
+      {/*  Calibrate Camera*/}
+      {/*</Button>*/}
       <Button className={'big-button'} component={Link} to={"/settings"} variant={"contained"} color={"secondary"}
               startIcon={<SettingsRoundedIcon />}>
         Settings

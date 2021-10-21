@@ -47,7 +47,7 @@ const Configurable = ({name, configId, user, onChange}) => {
         <Select
           labelId={`${configId}-label`}
           id={configId}
-          value={user[configId]}
+          value={user[configId].type}
           label={"Fatigue Response"}
           onChange={(event) => {onChange(event, configId)}}
         >
@@ -77,7 +77,11 @@ const Settings = () => {
   }, [])
 
   const recordSelection = (event, selectionId) => {
-    const newUser = {...user, [selectionId]: event.target.value}
+    const newUser = {...user,
+      [selectionId]: {
+      type: event.target.value
+      }
+    }
     userService.updateUser(newUser.id, newUser).then(r => setUser(r))
   }
 

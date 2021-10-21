@@ -15,13 +15,23 @@ export const FatigueColours = {
 
 }
 
-export const Guest ={
+export const Guest = {
   "id": 0,
   "name": "Guest",
-  "F1": "auditory",
-  "F2": "vibrator",
-  "F3": "trivia",
-  "F4": "parking"
+  "F1": {
+    "type": "auditory",
+    "level": 50
+  },
+  "F2": {
+    "type": "vibrator",
+    "level": "high"
+  },
+  "F3": {
+    "type": "trivia"
+  },
+  "F4": {
+    "type": "parking"
+  }
 }
 
 export const QuestionTime = 60
