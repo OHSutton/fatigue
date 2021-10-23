@@ -13,6 +13,7 @@ import {Guest} from "../utils";
 
 import '../styles/common.css'
 import '../styles/homescreen.css'
+import logo from '../pics/final_no_bg_64x.png'
 
 const Header = ({users, currentUser, updateCurrentUser}) => {
   const menuItems = users.map(user =>
@@ -21,18 +22,22 @@ const Header = ({users, currentUser, updateCurrentUser}) => {
 
   return (
     <div className={'header'}>
-      <FormControl sx={{width: 200}}>
-        <InputLabel id={`change-current-user`}>Change User</InputLabel>
-        <Select
-          labelId={`change-current-user`}
-          id={currentUser.id.toString()}
-          value={currentUser.name}
-          label={"Change User"}
-          onChange={(event) => {updateCurrentUser(event)}}
-        >
-          {menuItems}
-        </Select>
-      </FormControl>
+      <img src={logo}  alt={"eye spy logo"} className={'logo'}/>
+      <div className={'drop-down'}>
+        <FormControl sx={{width: 200}} >
+          <InputLabel id={`change-current-user`}>Change User</InputLabel>
+          <Select
+            labelId={`change-current-user`}
+            id={currentUser.id.toString()}
+            value={currentUser.name}
+            label={"Change User"}
+            onChange={(event) => {updateCurrentUser(event)}}
+          >
+            {menuItems}
+          </Select>
+        </FormControl>
+      </div>
+
     </div>
   )
 }
