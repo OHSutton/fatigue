@@ -17,8 +17,22 @@
 .configurable {
     display: flex;
     margin: 20px 0 20px 10px;
+    justify-content: space-between;
+    padding-right: 50px;
+    padding-left: 50px;
 }
 
 .config {
     margin-left: 50px;
+}
+
+.modal-box-style {
+    position: absolute;
+    top: 240px;
+    left: 400px;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    box-shadow: 3px 3px 15px 1px;
+    background: white;
+    padding: 20px;
 }

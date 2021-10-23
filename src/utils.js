@@ -20,14 +20,15 @@ export const Guest = {
   "name": "Guest",
   "F1": {
     "type": "auditory",
-    "level": 50
+    "level": 100
   },
   "F2": {
     "type": "vibrator",
-    "level": "high"
+    "level": 100,
   },
   "F3": {
-    "type": "trivia"
+    "type": "trivia",
+    "level": 100
   },
   "F4": {
     "type": "parking"

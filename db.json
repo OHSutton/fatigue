@@ -7,13 +7,15 @@
     "name": "Guest",
     "F1": {
       "type": "auditory",
-      "level": 50
+      "level": 100
     },
     "F2": {
-      "type": "parking"
+      "type": "vibrator",
+      "level": 100
     },
     "F3": {
-      "type": "auditory"
+      "type": "trivia",
+      "level": 100
     },
     "F4": {
       "type": "parking"
@@ -25,13 +27,15 @@
       "name": "Guest",
       "F1": {
         "type": "auditory",
-        "level": 50
+        "level": 100
       },
       "F2": {
-        "type": "parking"
+        "type": "vibrator",
+        "level": 100
       },
       "F3": {
-        "type": "auditory"
+        "type": "trivia",
+        "level": 100
       },
       "F4": {
         "type": "parking"
@@ -39,17 +43,18 @@
     },
     {
       "id": 1,
-      "name": "Blue",
+      "name": "Bob",
       "F1": {
         "type": "auditory",
-        "level": 50
+        "level": 100
       },
       "F2": {
         "type": "vibrator",
-        "level": "high"
+        "level": 100
       },
       "F3": {
-        "type": "trivia"
+        "type": "trivia",
+        "level": 100
       },
       "F4": {
         "type": "parking"
@@ -57,17 +62,18 @@
     },
     {
       "id": 2,
-      "name": "Red",
+      "name": "Sarah",
       "F1": {
         "type": "auditory",
-        "level": 50
+        "level": 100
       },
       "F2": {
         "type": "vibrator",
         "level": 100
       },
       "F3": {
-        "type": "trivia"
+        "type": "trivia",
+        "level": 100
       },
       "F4": {
         "type": "parking"
@@ -75,19 +81,21 @@
     },
     {
       "id": 3,
-      "name": "Green",
+      "name": "James",
       "F1": {
-        "type": "vibrator"
+        "type": "auditory",
+        "level": 100
       },
       "F2": {
         "type": "vibrator",
-        "level": "high"
+        "level": 100
       },
       "F3": {
-        "type": "vibrator"
+        "type": "trivia",
+        "level": 100
       },
       "F4": {
-        "type": "vibrator"
+        "type": "parking"
       }
     }
   ],

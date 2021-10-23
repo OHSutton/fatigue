@@ -34,7 +34,7 @@
     "server": "json-server --port 3001 --watch db.json",
     "backend": "node backend.js",
     "dev-backend": "nodemon backend.js",
-    "dev": "concurrently --kill-others \"npm run server\" \"npm run dev-backend\" \"npm start\""
+    "dev": "concurrently --kill-others \"npm run server\" \"npm run backend\" \"npm start\""
   },
   "browserslist": {
     "production": [
