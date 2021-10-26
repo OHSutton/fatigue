@@ -1,11 +1,12 @@
 import React, {useEffect} from "react";
 import useState from 'react-usestateref'
 import {Link} from "react-router-dom";
-import {Button, LinearProgress, Paper, Typography} from "@mui/material";
+import {Alert, Button, LinearProgress, Paper, Typography} from "@mui/material";
 
-import {QuestionTime, TriviaTime, FatigueColours, FatigueStatus} from '../utils'
+import {QuestionTime, TriviaTime, FatigueColours, FatigueStatus, Guest} from '../utils'
 import '../styles/common.css'
 import '../styles/start.css'
+import userService from "../services/users";
 
 const Header = ({runtime, status}) => {
   return (
@@ -18,6 +19,13 @@ const Header = ({runtime, status}) => {
       </Typography>
     </div>
   )
+}
+
+const CustomAlert = ({custom}) => {
+  if (custom === "parking") {
+    return <Alert severity="error" variant={"filled"}  sx={{"fontSize": 20}}>Please park the vehicle. It is not safe for you to drive.</Alert>
+  }
+  return <div></div>
 }
 
 const Trivia = ({trivia, answerSpoken, setAnswerSpoken}) => {
@@ -69,6 +77,19 @@ const Start = () => {
   const [status, setStatus] = useState('F0')
   const [trivia, setTrivia, triviaRef] = useState({})
   const [answerSpoken, setAnswerSpoken] = useState(true)
+  const [user, setUser, userRef] = useState(Guest)
+  const [custom, setCustom] = useState("")
+
+
+  // Get current user
+  useEffect(() => {
+    userService
+      .getCurrentUser()
+      .then(u => {
+        console.log("Fetched user", u)
+        setUser(u)
+      })
+  }, [])
 
   useEffect(() => {
     let intervalID = setInterval(() => {
@@ -113,6 +134,7 @@ const Start = () => {
 
 
   const updateTrivia = (rawTrivia) => {
+    setCustom("")
     rawTrivia.time = 0
     const utterance = new SpeechSynthesisUtterance(rawTrivia["question"]);
     window.speechSynthesis.speak(utterance);
@@ -122,13 +144,18 @@ const Start = () => {
 
   const updateFatigueLevel = (fatigueStatus) => {
     setStatus(fatigueStatus['fatigue'])
+    const newCustom = userRef.current !== undefined ? userRef.current[fatigueStatus['fatigue']].type : ""
+    setCustom(newCustom)
   }
 
 
   return (
     <Paper className={'page start-container'} square={true}>
       <Header runtime={runtime} status={status} />
-      <Trivia trivia={trivia} answerSpoken={answerSpoken} setAnswerSpoken={setAnswerSpoken}/>
+      {custom !== "" ?
+        <CustomAlert custom={custom}/>
+        : <Trivia trivia={trivia} answerSpoken={answerSpoken} setAnswerSpoken={setAnswerSpoken}/>}
+
       <Footer />
     </Paper>
   )
