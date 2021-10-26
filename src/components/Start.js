@@ -28,8 +28,8 @@ const Trivia = ({trivia, answerSpoken, setAnswerSpoken}) => {
   if (trivia.time <= QuestionTime) {
     return (
       <div className={"trivia"}>
-        <Typography variant={'h3'}>
-          {`Q: ${trivia["question"]}`}
+        <Typography variant={'h3'} align={"center"} style={{wordWrap: "break-word"}}>
+          {`Q: ${trivia["question"]} ?`}
         </Typography>
         <LinearProgress variant="determinate" value={trivia.time / QuestionTime * 100} />
       </div>
@@ -42,7 +42,7 @@ const Trivia = ({trivia, answerSpoken, setAnswerSpoken}) => {
     }
     return (
       <div className={"trivia"}>
-        <Typography variant={'h3'}>
+        <Typography variant={'h3'} align={"center"} style={{wordWrap: "break-word"}}>
           {`A: ${trivia["answer"]}`}
         </Typography>
         <LinearProgress variant="determinate" value={(trivia.time - QuestionTime) / (TriviaTime - QuestionTime) * 100} />

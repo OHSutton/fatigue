@@ -3,8 +3,8 @@
     "active": "false"
   },
   "current-user": {
-    "id": 0,
-    "name": "Guest",
+    "id": 3,
+    "name": "James",
     "F1": {
       "type": "auditory",
       "level": 100
@@ -14,7 +14,7 @@
       "level": 100
     },
     "F3": {
-      "type": "trivia",
+      "type": "auditory",
       "level": 100
     },
     "F4": {
@@ -92,7 +92,7 @@
         "level": 100
       },
       "F3": {
-        "type": "trivia",
+        "type": "auditory",
         "level": 100
       },
       "F4": {
