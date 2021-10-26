@@ -35,5 +35,5 @@ export const Guest = {
   }
 }
 
-export const QuestionTime = 60
-export const TriviaTime = 90
+export const QuestionTime = 20
+export const TriviaTime = 30

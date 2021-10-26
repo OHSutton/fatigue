@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import useState from 'react-usestateref'
 import {Link} from "react-router-dom";
-import {Button, Paper, Typography} from "@mui/material";
+import {Button, LinearProgress, Paper, Typography} from "@mui/material";
 
 import {QuestionTime, TriviaTime, FatigueColours, FatigueStatus} from '../utils'
 import '../styles/common.css'
@@ -20,28 +20,36 @@ const Header = ({runtime, status}) => {
   )
 }
 
-const Trivia = ({trivia}) => {
+const Trivia = ({trivia, answerSpoken, setAnswerSpoken}) => {
   if (trivia.question === undefined || trivia.time >= 90) {
     return <div></div>
   }
 
-  if (trivia.time < QuestionTime) {
+  if (trivia.time <= QuestionTime) {
     return (
       <div className={"trivia"}>
         <Typography variant={'h3'}>
           {`Q: ${trivia["question"]}`}
         </Typography>
+        <LinearProgress variant="determinate" value={trivia.time / QuestionTime * 100} />
       </div>
     )
   } else if (trivia.time <= TriviaTime) {
+    if (!answerSpoken) {
+      const utterance = new SpeechSynthesisUtterance(trivia["answer"]);
+      window.speechSynthesis.speak(utterance);
+      setAnswerSpoken(true)
+    }
     return (
       <div className={"trivia"}>
         <Typography variant={'h3'}>
           {`A: ${trivia["answer"]}`}
         </Typography>
+        <LinearProgress variant="determinate" value={(trivia.time - QuestionTime) / (TriviaTime - QuestionTime) * 100} />
       </div>
     )
   }
+  return <div></div>
 }
 
 
@@ -60,22 +68,22 @@ const Start = () => {
   const [runtime, setRuntime] = useState(0)
   const [status, setStatus] = useState('F0')
   const [trivia, setTrivia, triviaRef] = useState({})
-
+  const [answerSpoken, setAnswerSpoken] = useState(true)
 
   useEffect(() => {
     let intervalID = setInterval(() => {
-      setRuntime(runtime + 0.5)
+      setRuntime(runtime + 0.3)
 
       if (triviaRef.current.question !== undefined) {
         if (triviaRef.current.time < TriviaTime) {
           setTrivia(prevTrivia => {
-            return {...prevTrivia, time: prevTrivia['time'] + 0.5}
+            return {...prevTrivia, time: prevTrivia['time'] + 0.3}
           })
         } else {
           setTrivia({})
         }
       }
-    }, 500)
+    }, 300)
 
 
     return(() => {
@@ -106,8 +114,10 @@ const Start = () => {
 
   const updateTrivia = (rawTrivia) => {
     rawTrivia.time = 0
-    console.log("NEW TRIVIA", rawTrivia)
+    const utterance = new SpeechSynthesisUtterance(rawTrivia["question"]);
+    window.speechSynthesis.speak(utterance);
     setTrivia(rawTrivia)
+    setAnswerSpoken(false)
   }
 
   const updateFatigueLevel = (fatigueStatus) => {
@@ -118,7 +128,7 @@ const Start = () => {
   return (
     <Paper className={'page start-container'} square={true}>
       <Header runtime={runtime} status={status} />
-      <Trivia trivia={trivia} />
+      <Trivia trivia={trivia} answerSpoken={answerSpoken} setAnswerSpoken={setAnswerSpoken}/>
       <Footer />
     </Paper>
   )

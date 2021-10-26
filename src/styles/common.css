@@ -8,22 +8,13 @@
     cursor: none;
 }
 
-.page > * > * {
-    cursor: none;
-}
-
-.page > * > * > * {
-    cursor: none;
-}
 
 .big-button {
     width: 300px;
     height: 100px;
-    cursor: none;
 }
 
 .skinny-button {
     width: 300px;
     height: 75px;
-    cursor: none;
 }
