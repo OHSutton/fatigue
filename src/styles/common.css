@@ -1,11 +1,11 @@
 .page {
     width: 800px;
     height: 480px;
-    /*cursor: none;*/
+    cursor: none;
 }
 
 .page > * {
-    /*cursor: none;*/
+    cursor: none;
 }
 
 
