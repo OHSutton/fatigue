@@ -157,6 +157,7 @@ const Settings = () => {
   const updateSlider = (event, newValue) => {
     setSliderVal(newValue)
   }
+
   return (
     <Paper className={"page"}>
       <TitleBar user={user}/>
@@ -168,7 +169,7 @@ const Settings = () => {
         <Configurable name={"Extremely Fatigued"} configId={"F4"} user={user} onChange={recordSelection} handleOpen={handleOpen}/>
       </div>
       <div style={{display: "flex", justifyContent: 'flex-end'}}>
-        <Button variant={"outlined"} size={"large"} style={{marginRight: 10}} onClick={reset}>Reset</Button>
+        <Button variant={"outlined"} size={"medium"} style={{marginRight: 10}} onClick={reset}>Reset</Button>
       </div>
 
       <Modal
