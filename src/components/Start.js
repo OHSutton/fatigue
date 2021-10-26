@@ -144,8 +144,13 @@ const Start = () => {
 
   const updateFatigueLevel = (fatigueStatus) => {
     setStatus(fatigueStatus['fatigue'])
-    const newCustom = userRef.current !== undefined ? userRef.current[fatigueStatus['fatigue']].type : ""
-    setCustom(newCustom)
+    if (fatigueStatus['fatigue'] === "F0") {
+      setCustom("")
+    } else {
+      const newCustom = userRef.current !== undefined ? userRef.current[fatigueStatus['fatigue']].type : ""
+      setCustom(newCustom)
+    }
+
   }
 
 
