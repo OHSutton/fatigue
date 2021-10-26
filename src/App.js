@@ -7,10 +7,9 @@ import { ThemeProvider } from '@mui/material/styles';
 import Homescreen from "./components/Homescreen";
 import Start from "./components/Start";
 import Settings from "./components/Settings";
-import Calibrate from "./components/Calibrate"
 
 import SiteTheme from "./styles/Theme";
-
+import "./styles/common.css"
 
 
 function App() {

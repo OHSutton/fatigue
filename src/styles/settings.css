@@ -5,6 +5,7 @@
     justify-content: space-between;
     margin-top: 10px;
     margin-bottom: 10px;
+    cursor: none;
 }
 
 .title-settings {
@@ -12,6 +13,7 @@
     justify-content: space-around;
     margin-top: 10px;
     margin-bottom: 10px;
+    cursor: none;
 }
 
 .configurable {
@@ -20,10 +22,12 @@
     justify-content: space-between;
     padding-right: 50px;
     padding-left: 50px;
+    cursor: none;
 }
 
 .config {
     margin-left: 50px;
+    cursor: none;
 }
 
 .modal-box-style {
@@ -35,4 +39,5 @@
     box-shadow: 3px 3px 15px 1px;
     background: white;
     padding: 20px;
+    cursor: none;
 }
