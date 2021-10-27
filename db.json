@@ -6,16 +6,13 @@
     "id": 3,
     "name": "James",
     "F1": {
-      "type": "auditory",
-      "level": 100
+      "type": "parking"
     },
     "F2": {
-      "type": "vibrator",
-      "level": 100
+      "type": "parking"
     },
     "F3": {
-      "type": "auditory",
-      "level": 100
+      "type": "parking"
     },
     "F4": {
       "type": "parking"
@@ -30,11 +27,11 @@
         "level": 100
       },
       "F2": {
-        "type": "vibrator",
+        "type": "trivia",
         "level": 100
       },
       "F3": {
-        "type": "trivia",
+        "type": "vibrator",
         "level": 100
       },
       "F4": {
@@ -68,32 +65,28 @@
         "level": 100
       },
       "F2": {
-        "type": "auditory",
+        "type": "trivia",
         "level": 100
       },
       "F3": {
-        "type": "auditory",
+        "type": "vibrator",
         "level": 100
       },
       "F4": {
-        "type": "auditory",
-        "level": 100
+        "type": "parking"
       }
     },
     {
       "id": 3,
       "name": "James",
       "F1": {
-        "type": "auditory",
-        "level": 100
+        "type": "parking"
       },
       "F2": {
-        "type": "vibrator",
-        "level": 100
+        "type": "parking"
       },
       "F3": {
-        "type": "auditory",
-        "level": 100
+        "type": "parking"
       },
       "F4": {
         "type": "parking"

@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    cursor: none;
 }
 
 .header {
@@ -10,7 +9,6 @@
     display: flex;
     justify-content: space-between;
     margin-right: 10px;
-    cursor: none;
 }
 
 .homescreen-buttons {
@@ -20,16 +18,13 @@
     align-items: center;
     row-gap: 10px;
     margin-bottom: 100px;
-    cursor: none;
 }
 
 .logo {
     margin-left: 20px;
     margin-top: 5px;
-    cursor: none;
 }
 
 .drop-down {
     margin-top: 15px;
-    cursor: none;
 }

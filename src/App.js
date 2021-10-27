@@ -12,6 +12,7 @@ import SiteTheme from "./styles/Theme";
 import "./styles/common.css"
 
 
+// Encapsulates whole program to facilitate routing. The root component
 function App() {
 
   return (
@@ -22,7 +23,6 @@ function App() {
             <Route path={"/"} exact component={() => <Homescreen />} />
             <Route path={"/start"} exact component={() => <Start />} />
             <Route path={"/settings"} exact component={() => <Settings />} />
-            {/*<Route path={"/calibrate"} exact component={() => <Calibrate />} />*/}
           </Switch>
         </Router>
       </div>

@@ -48,15 +48,5 @@ app.post('/fatigue', (req, res) => {
   res.json(data)
 })
 
-// WIP
-app.post('/photo', (req, res) => {
-  console.log("===============PHOTO REQUEST ==================")
-  console.log(req)
-  const data = req.body
-  console.log("===============PHOTO BODY ==================")
-  console.log(data)
-})
-
-
 app.listen(3002)
 console.log("Listening on 3002!")

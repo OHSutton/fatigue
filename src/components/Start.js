@@ -8,6 +8,8 @@ import '../styles/common.css'
 import '../styles/start.css'
 import userService from "../services/users";
 
+
+// Component for run time & Fatigue Status
 const Header = ({runtime, status}) => {
   return (
     <div className={'start-header'}>
@@ -21,14 +23,16 @@ const Header = ({runtime, status}) => {
   )
 }
 
-const CustomAlert = ({custom}) => {
-  if (custom === "parking") {
+// Alert displayed when Parking is set for a fatigue level.
+const ParkingAlert = ({fatigueControl}) => {
+  if (fatigueControl === "parking") {
     return <Alert severity="error" variant={"filled"}  sx={{"fontSize": 20}}>Please park the vehicle. It is not safe for you to drive.</Alert>
   }
   return <div></div>
 }
 
-const Trivia = ({trivia, answerSpoken, setAnswerSpoken}) => {
+// Component to display trivia & progress bar
+const Trivia = ({trivia}) => {
   if (trivia.question === undefined || trivia.time >= 90) {
     return <div></div>
   }
@@ -37,21 +41,16 @@ const Trivia = ({trivia, answerSpoken, setAnswerSpoken}) => {
     return (
       <div className={"trivia"}>
         <Typography variant={'h3'} align={"center"} style={{wordWrap: "break-word"}}>
-          {`Q: ${trivia["question"]} ?`}
+          {`${trivia["question"]}`}
         </Typography>
         <LinearProgress variant="determinate" value={trivia.time / QuestionTime * 100} />
       </div>
     )
   } else if (trivia.time <= TriviaTime) {
-    if (!answerSpoken) {
-      const utterance = new SpeechSynthesisUtterance(trivia["answer"]);
-      window.speechSynthesis.speak(utterance);
-      setAnswerSpoken(true)
-    }
     return (
       <div className={"trivia"}>
         <Typography variant={'h3'} align={"center"} style={{wordWrap: "break-word"}}>
-          {`A: ${trivia["answer"]}`}
+          {`${trivia["answer"]}`}
         </Typography>
         <LinearProgress variant="determinate" value={(trivia.time - QuestionTime) / (TriviaTime - QuestionTime) * 100} />
       </div>
@@ -60,7 +59,7 @@ const Trivia = ({trivia, answerSpoken, setAnswerSpoken}) => {
   return <div></div>
 }
 
-
+// Component for stop button
 const Footer = () => {
   return (
     <div className={'start-footer'}>
@@ -71,14 +70,13 @@ const Footer = () => {
   )
 }
 
-
+// Sub-root component
 const Start = () => {
   const [runtime, setRuntime] = useState(0)
   const [status, setStatus] = useState('F0')
   const [trivia, setTrivia, triviaRef] = useState({})
-  const [answerSpoken, setAnswerSpoken] = useState(true)
   const [user, setUser, userRef] = useState(Guest)
-  const [custom, setCustom] = useState("")
+  const [fatigueControl, setFatigueControl] = useState("")
 
 
   // Get current user
@@ -91,6 +89,7 @@ const Start = () => {
       })
   }, [])
 
+  // Interval to increment runtime and trivia display time
   useEffect(() => {
     let intervalID = setInterval(() => {
       setRuntime(runtime + 0.3)
@@ -112,12 +111,12 @@ const Start = () => {
     })
   },[runtime])
 
+  // Sets up event source to allow server -> UI communication
+  // used to relay triva & fatigue_level messages from model
   useEffect(() => {
     let eventSource = new EventSource('http://localhost:3002/stream')
-    console.log("STARTED EVENTSOURCE", eventSource)
+    console.log("Started Eventsource", eventSource)
     eventSource.onmessage = e => {
-      console.log("RECEIVED MESSAGE", e)
-
       let data = JSON.parse(e.data)
       if (data.type === "trivia") {
         updateTrivia(data.data)
@@ -131,35 +130,31 @@ const Start = () => {
     })
   }, [])
 
-
-
+  // trigger trivia to display
   const updateTrivia = (rawTrivia) => {
-    setCustom("")
+    setFatigueControl("")
     rawTrivia.time = 0
-    const utterance = new SpeechSynthesisUtterance(rawTrivia["question"]);
-    window.speechSynthesis.speak(utterance);
     setTrivia(rawTrivia)
-    setAnswerSpoken(false)
   }
 
+  // trigger fatigue level to update
   const updateFatigueLevel = (fatigueStatus) => {
     setStatus(fatigueStatus['fatigue'])
     if (fatigueStatus['fatigue'] === "F0") {
-      setCustom("")
+      setFatigueControl("")
     } else {
       const newCustom = userRef.current !== undefined ? userRef.current[fatigueStatus['fatigue']].type : ""
-      setCustom(newCustom)
+      setFatigueControl(newCustom)
     }
 
   }
 
-
   return (
     <Paper className={'page start-container'} square={true}>
       <Header runtime={runtime} status={status} />
-      {custom !== "" ?
-        <CustomAlert custom={custom}/>
-        : <Trivia trivia={trivia} answerSpoken={answerSpoken} setAnswerSpoken={setAnswerSpoken}/>}
+      {fatigueControl !== "" ?
+        <ParkingAlert custom={fatigueControl}/>
+        : <Trivia trivia={trivia}/>}
 
       <Footer />
     </Paper>

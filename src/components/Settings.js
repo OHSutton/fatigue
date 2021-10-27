@@ -28,7 +28,7 @@ const canConfigure = (user, setting) => {
   return user[setting].type !== 'parking';
 }
 
-
+// Settings title: X's Name
 const TitleBar = ({user}) => {
   return (
     <div className={"title-bar"}>
@@ -47,7 +47,8 @@ const TitleBar = ({user}) => {
   )
 }
 
-const ConfigSettings = ({configId, user, onChange, handleOpen}) => {
+// Component containing a setting's drop down menu + slider display button
+const ConfigDropdown = ({configId, user, onChange, handleOpen}) => {
   return (
     <div>
       <FormControl sx={{width: 250}}>
@@ -73,9 +74,9 @@ const ConfigSettings = ({configId, user, onChange, handleOpen}) => {
 
     </div>
   )
-
 }
 
+// Component containing a name + setting drop down
 const Configurable = ({name, configId, user, onChange, handleOpen}) => {
   return (
     <div className={"configurable"}>
@@ -83,7 +84,7 @@ const Configurable = ({name, configId, user, onChange, handleOpen}) => {
         {name}
       </Typography>
 
-      <ConfigSettings configId={configId} user={user} onChange={onChange} handleOpen={handleOpen}/>
+      <ConfigDropdown configId={configId} user={user} onChange={onChange} handleOpen={handleOpen}/>
 
     </div>
   )
@@ -94,6 +95,8 @@ const Settings = () => {
   const [open, setOpen] = useState(false);
   const [sliderVal, setSliderVal] = useState(100);
   const [sliderSetting, setSliderSetting] = useState('F1');
+
+  // handle open slider popup
   const handleOpen = (configId) => {
     return () => {
       setSliderSetting(configId)
@@ -101,6 +104,8 @@ const Settings = () => {
       setOpen(true);
     }
   }
+
+  // handle close slider popup
   const handleClose = () => {
     const newUser = {
       ...user,
@@ -113,6 +118,7 @@ const Settings = () => {
     setOpen(false)
   }
 
+  // fetch current user
   useEffect(() => {
     userService
       .getCurrentUser()
@@ -121,6 +127,7 @@ const Settings = () => {
       })
   }, [])
 
+  // update current user when modifying user settings
   useEffect(() => {
     return () => {
       // update current-user in db
@@ -130,6 +137,7 @@ const Settings = () => {
     }
   }, [user])
 
+  // update when selecting drop down
   const recordSelection = (event, selectionId) => {
     const newUser = {...user,
       [selectionId]: {
@@ -139,21 +147,18 @@ const Settings = () => {
     if (event.target.value !== 'parking') {
       newUser[selectionId].level = 100
     }
-    console.log("NEW USER BEFORE UPDATE", newUser)
     userService.updateUser(newUser.id, newUser).then(r => setUser(r))
   }
 
+  // reset settings to default
   const reset = () => {
-    console.log("BEFORE", user)
     const newUser = {...Guest, id: user.id, name: user.name}
-    console.log("NEW USER")
     userService.updateUser(newUser.id, newUser).then(r => {
       setUser(newUser)
-      console.log("AFTER", r)
-      console.log("AFTER USER", user)
     })
   }
 
+  // enable slider to move
   const updateSlider = (event, newValue) => {
     setSliderVal(newValue)
   }

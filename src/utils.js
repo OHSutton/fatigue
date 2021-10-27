@@ -1,3 +1,4 @@
+// mapping of Fatigue code to text status
 export const FatigueStatus = {
   'F0': 'Awake',
   'F1': 'Slightly Fatigued',
@@ -6,6 +7,7 @@ export const FatigueStatus = {
   'F4': 'Extremely Fatigued'
 }
 
+// Colour of fatigue level when displayed
 export const FatigueColours = {
   'F0': 'DodgerBlue',
   'F1': 'Green',
@@ -15,6 +17,7 @@ export const FatigueColours = {
 
 }
 
+// Base settings
 export const Guest = {
   "id": 0,
   "name": "Guest",
@@ -23,11 +26,11 @@ export const Guest = {
     "level": 100
   },
   "F2": {
-    "type": "vibrator",
+    "type": "trivia",
     "level": 100,
   },
   "F3": {
-    "type": "trivia",
+    "type": "vibrator",
     "level": 100
   },
   "F4": {
@@ -35,5 +38,10 @@ export const Guest = {
   }
 }
 
+// Time Question is displayed on screen
 export const QuestionTime = 20
+
+// Total trivia time (includes question & answer)
+// TriviaTime-QuestionTime = Time Answer is displayed
+// so 30-20 = 10 seconds for the anwer
 export const TriviaTime = 30
