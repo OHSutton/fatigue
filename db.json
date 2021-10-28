@@ -6,16 +6,20 @@
     "id": 3,
     "name": "James",
     "F1": {
-      "type": "parking"
+      "type": "trivia",
+      "level": 4
     },
     "F2": {
-      "type": "parking"
+      "type": "trivia",
+      "level": 33
     },
     "F3": {
-      "type": "parking"
+      "type": "trivia",
+      "level": 65
     },
     "F4": {
-      "type": "parking"
+      "type": "trivia",
+      "level": 100
     }
   },
   "users": [
@@ -80,16 +84,20 @@
       "id": 3,
       "name": "James",
       "F1": {
-        "type": "parking"
+        "type": "trivia",
+        "level": 4
       },
       "F2": {
-        "type": "parking"
+        "type": "trivia",
+        "level": 33
       },
       "F3": {
-        "type": "parking"
+        "type": "trivia",
+        "level": 65
       },
       "F4": {
-        "type": "parking"
+        "type": "trivia",
+        "level": 100
       }
     }
   ],
