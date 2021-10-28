@@ -173,7 +173,7 @@ const Start = () => {
     <Paper className={'page start-container'} square={true}>
       <Header runtime={runtime} status={status} />
       {fatigueControl !== "" ?
-        <ParkingAlert custom={fatigueControl}/>
+        <ParkingAlert fatigueControl={fatigueControl}/>
         : <Trivia trivia={trivia}  answerSpoken={answerSpoken} setAnswerSpoken={setAnswerSpoken}/>}
 
       <Footer />
