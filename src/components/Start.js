@@ -32,7 +32,7 @@ const ParkingAlert = ({fatigueControl}) => {
 }
 
 // Component to display trivia & progress bar
-const Trivia = ({trivia, answerSpoken, setAnswerSpoken, user, fatigueStatus}) => {
+const Trivia = ({trivia, answerSpoken, setAnswerSpoken}) => {
   if (trivia.question === undefined || trivia.time >= 90) {
     return <div></div>
   }
@@ -49,9 +49,6 @@ const Trivia = ({trivia, answerSpoken, setAnswerSpoken, user, fatigueStatus}) =>
   } else if (trivia.time <= TriviaTime) {
     if (!answerSpoken) {
       const utterance = new SpeechSynthesisUtterance(trivia["answer"]);
-      if (user[fatigueStatus].level) {
-        utterance.volume = user[fatigueStatus].level / 100 // set volume
-      }
       window.speechSynthesis.speak(utterance);
 
       setAnswerSpoken(true)
@@ -89,6 +86,15 @@ const Start = () => {
   const [fatigueControl, setFatigueControl] = useState("")
   const [answerSpoken, setAnswerSpoken] = useState(true)
 
+  useEffect(() => {
+    userService.setCameraActivity(true)
+    console.log("SET TO TRUE")
+    return () => {
+      userService.setCameraActivity(false).then(() => {
+        console.log("SET TO FALSE")
+      })
+    }
+  }, [])
 
   // Get current user
   useEffect(() => {
@@ -146,10 +152,6 @@ const Start = () => {
     setFatigueControl("")
     rawTrivia.time = 0
     const utterance = new SpeechSynthesisUtterance(rawTrivia["question"]);
-    console.log(userRef.current)
-    if (userRef.current && userRef.current[statusRef.current].level) {
-      utterance.volume = userRef.current[statusRef.current].level / 100 // set volume
-    }
     window.speechSynthesis.speak(utterance);
     setTrivia(rawTrivia)
     setAnswerSpoken(false)
@@ -172,7 +174,7 @@ const Start = () => {
       <Header runtime={runtime} status={status} />
       {fatigueControl !== "" ?
         <ParkingAlert custom={fatigueControl}/>
-        : <Trivia trivia={trivia}  answerSpoken={answerSpoken} setAnswerSpoken={setAnswerSpoken} user={user} fatigueStatus={status}/>}
+        : <Trivia trivia={trivia}  answerSpoken={answerSpoken} setAnswerSpoken={setAnswerSpoken}/>}
 
       <Footer />
     </Paper>
