@@ -93,6 +93,23 @@ def eye_aspect_ratio(eye):
     ear = (p2_p6 + p3_p5) / (2.0 * p1_p4)
     return ear
 
+def mouth_aspect_ratio(mouth):
+    '''
+    Returns the Mouth Aspect Ratio of all 19 points around the mouth.
+    Parameters:
+            mouth (list): list of all the values of the nineteen points around the mouth
+    Returns:
+            mar (float): float value of the mouth aspect ratio for the passed mouth points
+    '''
+    p50_60 = dist.euclidean(mouth[1], mouth[11])
+    p51_59 = dist.euclidean(mouth[2], mouth[10])
+    p52_58 = dist.euclidean(mouth[3], mouth[9])
+    p53_57 = dist.euclidean(mouth[4], mouth[8])
+    p54_56 = dist.euclidean(mouth[5], mouth[7])
+    p49_55 = dist.euclidean(mouth[0], mouth[6])
+    mar = (p50_60 + p51_59 + p52_58 + p53_57 + p54_56)/(2*p49_55)
+    return mar
+
 def check_roll_angle(image, lefteyex, lefteyey, righteyex, righteyey):
     '''
     Returns the roll angle of the user's head
@@ -312,6 +329,8 @@ def pulse_motor(pwm):
 
 def main():
     global playingTrivia
+    global fatigueState
+    global fatigueStates
     #Initializations
     pygame.init() #init pygame for tsound
     pygame.mixer.music.load('notification.mp3')
@@ -334,13 +353,14 @@ def main():
     #Finding landmark id for left and right eyes
     (leftEyeStart, leftEyeEnd) = face_utils.FACIAL_LANDMARKS_IDXS["left_eye"]
     (rightEyeStart, rightEyeEnd) = face_utils.FACIAL_LANDMARKS_IDXS["right_eye"]
+    (mouthStart, mouthEnd) = face_utils.FACIAL_LANDMARKS_IDXS["mouth"]
 
     eyeClosedCounter = 0
     blinkCounter = 0
     eyeReopened = 0
-    prevTime = datetime.now().strftime('%H:%M:%S.%f')[:-4]
     currTime = datetime.now().strftime('%H:%M:%S.%f')[:-4]
     blinkLastChecked = currTime
+    triviaSent = currTime
 
     if RECORDING:
         frame_width = int(webcamFeed.get(3))
@@ -356,12 +376,12 @@ def main():
         grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         faces = faceDetector(grayImage, 0)
         currTime = datetime.now().strftime('%H:%M:%S.%f')[:-3]
-        tdelta = datetime.strptime(currTime, FMT) - datetime.strptime(prevTime, FMT)
         for face in faces:
             faceLandmarks = landmarkFinder(grayImage, face)
             faceLandmarks = face_utils.shape_to_np(faceLandmarks)
             leftEye = faceLandmarks[leftEyeStart:leftEyeEnd]
             rightEye = faceLandmarks[rightEyeStart:rightEyeEnd]
+            mouth = faceLandmarks[mouthStart:mouthEnd]
             check_roll_angle(image, faceLandmarks[45][0], faceLandmarks[45][1], faceLandmarks[36][0], faceLandmarks[36][1])
             check_yaw_angle(image, faceLandmarks[27][0], faceLandmarks[27][1], faceLandmarks[30][0], faceLandmarks[30][1])
             pitch_angle = check_pitch_angle(image,
@@ -371,21 +391,22 @@ def main():
                                 faceLandmarks[15][0],faceLandmarks[15][1],
                                 faceLandmarks[45][0], faceLandmarks[45][1],
                                 faceLandmarks[36][0], faceLandmarks[36][1])
+            #print(pitch_angle)
+            if (fatigueState == 0):
+                if (pitch_angle < -10):
+                    if (blinkCounter < 10):
+                        send_fatigue_level("F1")
+                        play_tone()
+                        time.sleep(2)
+                        send_fatigue_level("F0")
 
-            print(pitch_angle)
-            if (pitch_angle < -10):
-                if (blinkCounter < 10):
-                    send_fatigue_level("F1")
-                    play_tone()
-                    time.sleep(1)
             leftEAR = eye_aspect_ratio(leftEye)
             rightEAR = eye_aspect_ratio(rightEye)
-
+            mar = mouth_aspect_ratio(mouth)
             ear = (leftEAR + rightEAR) / 2.0
             checktime = datetime.strptime(currTime, FMT) - datetime.strptime(blinkLastChecked, FMT)
+
             checktime = checktime.total_seconds()
-            if checktime > 3:
-                send_fatigue_level("F0")
             if checktime > 1:
                 if ear < MINIMUM_EAR:
                     if eyeReopened == 1:
@@ -402,23 +423,35 @@ def main():
             if DETAILED:
                 cv2.putText(image, "Blink Counter: {}".format(blinkCounter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 255, 0), 3)
 
-            if (blinkCounter >= 25):
+            if (blinkCounter >= 15):
+                fatigueState = 3
                 send_fatigue_level("F3")
                 pulse_motor(pwm)
                 playingTrivia = 1
                 blinkCounter = 0
                 send_trivia("", "")
+                fatigueState = 0
+                send_fatigue_level("F0")
 
-            elif (blinkCounter == 10):
+            if (mar > 2):
                 if (playingTrivia):
+                    fatigueState = 2
                     send_fatigue_level("F2")
                     send_trivia("How many Harry Potter movies are there?","Eight")
                     ttsEngine.say("How many Harry Potter movies are there?")
                     ttsEngine.runAndWait()
+                    triviaSent = datetime.now().strftime('%H:%M:%S.%f')[:-3]
                     playingTrivia = 0
+            triviaCheckTime = datetime.strptime(currTime, FMT) - datetime.strptime(triviaSent, FMT)
+            triviaCheckTime = triviaCheckTime.total_seconds()
+            if (playingTrivia == 0):
+                if (triviaCheckTime > 18 and triviaCheckTime < 19):
+                    ttsEngine.say("Eight")
+                    ttsEngine.runAndWait()
+                    send_fatigue_level("F0")
+                    fatigueState = 0
 
-            print(blinkCounter)
-
+            #print(blinkCounter)
             if FATIGUE:
                 if eyeClosedCounter >= MAXIMUM_FRAME_COUNT:
                     cv2.putText(image, "!!Possible Fatigue Detected!!", (8, 300), cv2.FONT_HERSHEY_SIMPLEX, 1.7, (0, 0, 255), 3)
@@ -432,8 +465,6 @@ def main():
         rawCapture.truncate(0)
         if key == 27:
             break
-        #:ttsEngine.say("Please align your face.")
-        #ttsEngine.runAndWait()
     if RECORDING:
         out.release()
     cv2.destroyAllWindows()
