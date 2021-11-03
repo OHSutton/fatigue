@@ -44,4 +44,4 @@ export const QuestionTime = 20
 // Total trivia time (includes question & answer)
 // TriviaTime-QuestionTime = Time Answer is displayed
 // so 30-20 = 10 seconds for the anwer
-export const TriviaTime = 30
+export const TriviaTime = 25

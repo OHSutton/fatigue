@@ -44,18 +44,18 @@ import pyttsx3
 import pygame
 import os
 import json
-from trivia import * #Oliver Sutton's Library
-from fatigue_level import * #Oliver Sutton's Library
+import trivia #Oliver Sutton's Library
+import fatigue_level #Oliver Sutton's Library
 
 
 #Global Configuration Variables
 FACIAL_LANDMARK_PREDICTOR = "shape_predictor_68_face_landmarks.dat" # path to dlib's pre-trained facial landmark predictor
-MINIMUM_EAR = 0.3 #Minimum EAR for both the eyes to mark the eyes as open
+MINIMUM_EAR = 0.25 #Minimum EAR for both the eyes to mark the eyes as open
 MAXIMUM_FRAME_COUNT = 12 #Maximum number of consecutive frames in which EAR can remain less than MINIMUM_EAR, otherwise alert drowsiness
 FMT = '%H:%M:%S.%f' #Time format
 RECORDING = False
 DETAILED = True
-FATIGUE = False
+FATIGUE = True
 
 #Variables
 #trivia = "http://localhost:3002/trivia"
@@ -71,7 +71,6 @@ pwmPin = 13
 motorPin1 = 5
 motorPin2 = 6
 pwm = 0
-playingTrivia = 1;
 fatigueState = 0; #0:awake, 1:tones, 2:trivia, 3:haptics, 4:rest
 
 #Modes
@@ -115,7 +114,7 @@ def check_roll_angle(image, lefteyex, lefteyey, righteyex, righteyey):
     if DETAILED:
         cv2.line(image, (righteyex, righteyey), (lefteyex, lefteyey), (0,0,255), 2)
         cv2.line(image, (0, centery), (800, centery), (0, 255, 255), 2)
-        cv2.putText(image, "roll angle: {}".format(round(rollAngleDegrees,2)), (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+        cv2.putText(image, "roll angle: {}".format(round(rollAngleDegrees,2)), (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
         if (rollAngleDegrees > minAngle):
             cv2.putText(image, "head rolled left", (500, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
         if (rollAngleDegrees < -minAngle):
@@ -144,7 +143,7 @@ def check_yaw_angle(image, uppernosex, uppernosey, lowernosex, lowernosey):
     if DETAILED:
         cv2.line(image, (uppernosex, uppernosey), (lowernosex, lowernosey), (255,0,0), 2)
         cv2.line(image, (centerx, 0), (centerx, 600), (0, 255, 255), 2)
-        cv2.putText(image, "yaw angle: {}".format(round(yawAngleDegrees,2)), (10, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+        cv2.putText(image, "yaw angle: {}".format(round(yawAngleDegrees,2)), (10, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
         if (yawAngleDegrees > minAngle):
             cv2.putText(image, "head yawed left", (500, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
         if ((yawAngleDegrees) < -minAngle):
@@ -169,7 +168,7 @@ def check_pitch_angle(image,
             rightupperjawy (int): y value of the upper point of the right jaw (y component of the coordinate for the pixel)
             leftlowerjawx (int): x value of the lower point of the left jaw (x component of the coordinate for the pixel)
             leftlowerjawy (int): y value of the lower point of the left jaw (y component of the coordinate for the pixel)
-            rightloiwerjawx (int): x value of the lower point of the right jaw (x component of the coordinate for the pixel)
+            rightlowerjawx (int): x value of the lower point of the right jaw (x component of the coordinate for the pixel)
             rightlowerjawy (int): y value of the lower point of the right jaw (y component of the coordinate for the pixel)
             lefteyex (int): x value of the point of the left eye (x component of the coordinate for the pixel)
             lefteyey (int): y value of the point of the left eye (y component of the coordinate for the pixel)
@@ -193,7 +192,7 @@ def check_pitch_angle(image,
     pitchAngleDegrees = centeruppery-centery
     if DETAILED:
         cv2.line(image, (rightupperjawx, rightupperjawy), (leftupperjawx, leftupperjawy), (0,255,0), 2)
-        cv2.putText(image, "pitch angle: {}".format(round(pitchAngleDegrees,2)), (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+        cv2.putText(image, "pitch angle: {}".format(round(pitchAngleDegrees,2)), (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
         if (centeruppery > (centery + minAngle)):
             cv2.putText(image, "head pitched up", (500, 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
         if (centeruppery < (centery - minAngle)):
@@ -254,15 +253,11 @@ def button_callback(channel):
     if not (GPIO.input(sw1)):
         #do switch one logic right here
         print("switch 1 pressed")
-        #os.system("killall chromium-browser-v7")
         sys.exit(0)
     if not (GPIO.input(sw2)):
         #do switch two logic right here
         print("switch 2 pressed")
-        #cv2.putText(image, "!!Possible Fatigue Detected!!", (8, 300), cv2.FONT_HERSHEY_SIMPLEX, 1.7, (0, 0, 255), 3)
-        play_tone()
-        send_fatigue_level("F4")
-        time.sleep(5)
+
 
 def set_motor_speed(pwm, speed):
     '''
@@ -297,23 +292,11 @@ def setup_motor(motorPin1, motorPin2, pwmPin):
 def play_tone():
     pygame.mixer.music.play()
 
-def pulse_motor(pwm):
-    set_motor_speed(pwm, 50)
-    time.sleep(2)
-    set_motor_speed(pwm, 0)
-    time.sleep(1)
-    set_motor_speed(pwm, 65)
-    time.sleep(2)
-    set_motor_speed(pwm, 0)
-    time.sleep(1)
-    set_motor_speed(pwm, 75)
-    time.sleep(2)
-    set_motor_speed(pwm, 0)
+
 
 def main():
-    global playingTrivia
     #Initializations
-    pygame.init() #init pygame for tsound
+    pygame.init() #init pygame for sound
     pygame.mixer.music.load('notification.mp3')
     faceDetector = dlib.get_frontal_face_detector() #dlib's HOG based face detector
     landmarkFinder = dlib.shape_predictor(FACIAL_LANDMARK_PREDICTOR) #dlib's landmark finder/predcitor inside detected face
@@ -325,7 +308,7 @@ def main():
     f = open("../db.json")
 
     #signal.pause()
-    #trivia.send_trivia("", "")
+    trivia.send_trivia("", "")
     #setup text to speech engine
     ttsEngine = pyttsx3.init()
     ttsEngine.setProperty('rate', 170)
@@ -347,8 +330,11 @@ def main():
         frame_height = int(webcamFeed.get(4))
         out = cv2.VideoWriter('video1011.avi',cv2.VideoWriter_fourcc(*'XVID'), 15, (800, 600))
 
+    set_motor_speed(pwm, 50)
+    time.sleep(3)
+    set_motor_speed(pwm, 0)
+
     for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
-        set_motor_speed(pwm, 0)
         image = frame.array
         image = imutils.rotate(image, 60)
         image = crop_image(image, (350, 400))
@@ -364,7 +350,7 @@ def main():
             rightEye = faceLandmarks[rightEyeStart:rightEyeEnd]
             check_roll_angle(image, faceLandmarks[45][0], faceLandmarks[45][1], faceLandmarks[36][0], faceLandmarks[36][1])
             check_yaw_angle(image, faceLandmarks[27][0], faceLandmarks[27][1], faceLandmarks[30][0], faceLandmarks[30][1])
-            pitch_angle = check_pitch_angle(image,
+            check_pitch_angle(image,
                                 faceLandmarks[0][0],faceLandmarks[0][1],
                                 faceLandmarks[16][0],faceLandmarks[16][1],
                                 faceLandmarks[1][0],faceLandmarks[1][1],
@@ -372,20 +358,12 @@ def main():
                                 faceLandmarks[45][0], faceLandmarks[45][1],
                                 faceLandmarks[36][0], faceLandmarks[36][1])
 
-            print(pitch_angle)
-            if (pitch_angle < -10):
-                if (blinkCounter < 10):
-                    send_fatigue_level("F1")
-                    play_tone()
-                    time.sleep(1)
             leftEAR = eye_aspect_ratio(leftEye)
             rightEAR = eye_aspect_ratio(rightEye)
 
             ear = (leftEAR + rightEAR) / 2.0
             checktime = datetime.strptime(currTime, FMT) - datetime.strptime(blinkLastChecked, FMT)
             checktime = checktime.total_seconds()
-            if checktime > 3:
-                send_fatigue_level("F0")
             if checktime > 1:
                 if ear < MINIMUM_EAR:
                     if eyeReopened == 1:
@@ -402,20 +380,11 @@ def main():
             if DETAILED:
                 cv2.putText(image, "Blink Counter: {}".format(blinkCounter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 255, 0), 3)
 
-            if (blinkCounter >= 25):
-                send_fatigue_level("F3")
-                pulse_motor(pwm)
-                playingTrivia = 1
-                blinkCounter = 0
-                send_trivia("", "")
-
-            elif (blinkCounter == 10):
-                if (playingTrivia):
-                    send_fatigue_level("F2")
-                    send_trivia("How many Harry Potter movies are there?","Eight")
-                    ttsEngine.say("How many Harry Potter movies are there?")
-                    ttsEngine.runAndWait()
-                    playingTrivia = 0
+            if (blinkCounter > 10):
+                blinkCounter = 0;
+                set_motor_speed(pwm, 50)
+                time.sleep(2)
+                set_motor_speed(pwm, 0)
 
             print(blinkCounter)
 
@@ -423,7 +392,6 @@ def main():
                 if eyeClosedCounter >= MAXIMUM_FRAME_COUNT:
                     cv2.putText(image, "!!Possible Fatigue Detected!!", (8, 300), cv2.FONT_HERSHEY_SIMPLEX, 1.7, (0, 0, 255), 3)
                     play_tone()
-                    send_fatigue_level("F4")
 
         if RECORDING:
             out.write(image)
@@ -432,8 +400,7 @@ def main():
         rawCapture.truncate(0)
         if key == 27:
             break
-        #:ttsEngine.say("Please align your face.")
-        #ttsEngine.runAndWait()
+
     if RECORDING:
         out.release()
     cv2.destroyAllWindows()

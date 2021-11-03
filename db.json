@@ -3,18 +3,18 @@
     "active": true
   },
   "current-user": {
-    "id": 3,
-    "name": "James",
+    "id": 1,
+    "name": "Bob",
     "F1": {
       "type": "auditory",
       "level": 100
     },
     "F2": {
-      "type": "trivia",
-      "level": 100
+      "type": "vibrator",
+      "level": 63
     },
     "F3": {
-      "type": "vibrator",
+      "type": "trivia",
       "level": 100
     },
     "F4": {
@@ -50,7 +50,7 @@
       },
       "F2": {
         "type": "vibrator",
-        "level": 100
+        "level": 63
       },
       "F3": {
         "type": "trivia",
